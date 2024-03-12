@@ -1,9 +1,6 @@
-const express = require('express');
 const Movie = require('../models/Movie.js');
 
-const routes = express.Router();
-
-routes.post('/movie', async (req, res) => {
+const httpCreateMovie = async (req, res) => {
   const movie = new Movie({
     title: req.body.title,
     director: req.body.director,
@@ -13,12 +10,12 @@ routes.post('/movie', async (req, res) => {
   await movie.save();
 
   res.status(201).json({ message: 'Movie created', data: movie });
-});
+};
 
-routes.get('/movie', async (req, res) => {
+const httpGetMovies = async (req, res) => {
   const movie = await Movie.find({});
 
   res.status(200).json({ message: 'success', data: movie });
-});
+};
 
-module.exports = routes;
+module.exports = { httpCreateMovie, httpGetMovies };
