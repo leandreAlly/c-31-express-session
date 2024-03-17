@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.connection.on('open', () => {
   console.info('Database connected');
@@ -9,13 +9,12 @@ mongoose.connection.on('close', () => {
 });
 
 const mongoConnect = async () => {
-  await mongoose.connect('<MongoDb connection string >');
+  await mongoose.connect(
+    'mongodb+srv://leandreAlly:Wi17ipwH4ctmqvEK@testing.2u4ar05.mongodb.net/blog'
+  );
 };
 const mongoDisconnect = async () => {
   await mongoose.disconnect();
 };
 
-module.exports = {
-  mongoConnect,
-  mongoDisconnect,
-};
+export { mongoConnect, mongoDisconnect };

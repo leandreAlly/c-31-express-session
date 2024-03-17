@@ -1,5 +1,5 @@
-const express = require('express');
-const apiRouter = require('./src/routes');
+import express from 'express';
+import apiRouter from './routes/index';
 
 const app = express();
 
@@ -11,4 +11,4 @@ app.use('/api/v1', (req, res) => {
   res.status(200).json({ message: 'Welcome to the movie API' });
 });
 
-module.exports = app;
+export default app;

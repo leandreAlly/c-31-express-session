@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 const MovieSchema = Joi.object({
   title: Joi.string().required(),
@@ -6,8 +6,8 @@ const MovieSchema = Joi.object({
   summary: Joi.string(),
 });
 
-const validateMovie = (movieData) => {
+const validateMovie = (movieData: any) => {
   return MovieSchema.validate(movieData);
 };
 
-module.exports = validateMovie;
+export default validateMovie;
