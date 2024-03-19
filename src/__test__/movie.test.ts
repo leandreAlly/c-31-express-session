@@ -1,13 +1,18 @@
 import request from 'supertest';
-import { mongoConnect, mongoDisconnect } from '../services/mongo';
 import app from '../app';
 import {
   movieData,
   movieWithoutDirector,
   movieWithoutTitle,
+  signInData,
+  signUpData,
 } from '../mock/static';
+import User from '../models/User';
+import { mongoConnect, mongoDisconnect } from '../services/mongo';
 
 jest.setTimeout(10000);
+
+let token: string;
 
 describe('Movie API', () => {
   beforeAll(async () => {
@@ -15,6 +20,7 @@ describe('Movie API', () => {
   });
 
   afterAll(async () => {
+    await User.deleteMany();
     await mongoDisconnect();
   });
 
@@ -35,9 +41,24 @@ describe('Movie API', () => {
       expect(body.data).toBeDefined();
     });
 
+    test('It should return signup and login', async () => {
+      const response = await request(app)
+        .post('/api/v1/user/register')
+        .send(signUpData)
+        .expect(201);
+
+      const responseLogin = await request(app)
+        .post('/api/v1/user/login')
+        .send(signInData)
+        .expect(200);
+
+      token = responseLogin.body.token;
+    });
+
     test('it should return 201 and list of all movies', async () => {
       const { body } = await request(app)
         .post('/api/v1/movie')
+        .set('Authorization', `Bearer ${token}`)
         .send(movieData)
         .expect('Content-Type', /json/)
         .expect(201);
@@ -48,6 +69,7 @@ describe('Movie API', () => {
     test('it should return 400 for empty title', async () => {
       const { body } = await request(app)
         .post('/api/v1/movie')
+        .set('Authorization', `Bearer ${token}`)
         .send(movieWithoutTitle)
         .expect('Content-Type', /json/)
         .expect(400);
@@ -55,6 +77,7 @@ describe('Movie API', () => {
     test('it should return 400 for empty director', async () => {
       const { body } = await request(app)
         .post('/api/v1/movie')
+        .set('Authorization', `Bearer ${token}`)
         .send(movieWithoutDirector)
         .expect('Content-Type', /json/)
         .expect(400);

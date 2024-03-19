@@ -4,10 +4,11 @@ import {
   httpGetMovies,
 } from '../controllers/movie.controllers';
 import isValid from '../middlewares/movieMiddleware';
+import { protectedRoute } from '../middlewares/userMiddleware';
 
 const movieRoutes = express.Router();
 
-movieRoutes.post('/', isValid, httpCreateMovie);
+movieRoutes.post('/', protectedRoute, isValid, httpCreateMovie);
 movieRoutes.get('/', httpGetMovies);
 
 export { movieRoutes };

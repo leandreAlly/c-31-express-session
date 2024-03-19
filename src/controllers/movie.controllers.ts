@@ -8,6 +8,8 @@ const httpCreateMovie = async (req: Request, res: Response) => {
     summary: req.body.summary,
   });
 
+  // console.log('verify Request', req.user);
+
   await movie.save();
   res.status(201).json({ message: 'Movie created', data: movie });
 };
